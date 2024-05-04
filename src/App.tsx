@@ -26,9 +26,11 @@ function App() {
   const [change, setChange] = useState<string>('');
   const [form, setForm] = useState<string>('')
   const [searchSatus, setSearchStatus] = useState<string>(' invisible');
+  const [initValue, setinitvalue] = useState<string>('')
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setChange(e.currentTarget.value)
+    setChange(e.currentTarget.value);
+    setinitvalue(e.currentTarget.value)
   };
 
   const handleOnClickSearchBtn = () => {
@@ -37,6 +39,8 @@ function App() {
     }
     else if (change !== '') {
       setForm(change);
+      setinitvalue('');
+      setSearchStatus(' invisible');
       navigate('/catalog.html')
     }
     else {
@@ -65,7 +69,7 @@ function App() {
               onSubmit={handleOnSubmitHeader}
               onClickSearch={handleOnClickSearchBtn}
               searchSatus={searchSatus}
-      />                       
+              initValue={initValue}      />                       
       <main className="container">
         <div className="row">
           <div className="col">

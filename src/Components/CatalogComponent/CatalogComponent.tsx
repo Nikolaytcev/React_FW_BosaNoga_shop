@@ -23,6 +23,9 @@ export const CatalogComponent = () => {
   }
 
   if (!loading) {
+    if (data.length === 0) {
+      allData.current = []
+    }
     if(oldCategory.current !== category) {
         oldCategory.current = category;
         allData.current = [];

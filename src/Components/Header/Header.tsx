@@ -6,13 +6,14 @@ import { nanoid } from 'nanoid'
 export interface Iheader {
   navLinks: {name: string, link: string}[];
   searchSatus?: string;
+  initValue?: string;
   onClickCart?: () => void;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
   onClickSearch?: () => void
 }
 
-export const Header: FC<Iheader> = ({ navLinks, searchSatus, onClickCart, onChange, onSubmit, onClickSearch }) => {
+export const Header: FC<Iheader> = ({ navLinks, searchSatus, initValue, onClickCart, onChange, onSubmit, onClickSearch }) => {
   
   return (
     <header className="container">
@@ -36,7 +37,7 @@ export const Header: FC<Iheader> = ({ navLinks, searchSatus, onClickCart, onChan
                   </div>
                 </div>
                 <form data-id="search-form" className={"header-controls-search-form form-inline" + searchSatus} onSubmit={onSubmit}>
-                  <input className="form-control" placeholder="Поиск" onChange={onChange}></ input>
+                  <input className="form-control" placeholder="Поиск" onChange={onChange} value={initValue}></ input>
                 </form>
               </div>
             </div>
