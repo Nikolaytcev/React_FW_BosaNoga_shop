@@ -1,5 +1,3 @@
-// import React from 'react'
-// import { useState } from 'react'
 import { CatalogComponent } from '../../Components/CatalogComponent/CatalogComponent'
 
 interface Icatalog {
@@ -9,7 +7,6 @@ interface Icatalog {
 }
 
 export const Catalog = ({ onChange, onSubmit, fromFinder }: Icatalog) => {
-
   return (
     <section className="catalog">
       <h2 className="text-center">Каталог</h2>

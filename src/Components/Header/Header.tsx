@@ -5,12 +5,15 @@ import { nanoid } from 'nanoid'
 
 export interface Iheader {
   navLinks: {name: string, link: string}[];
-  onClick?: () => void;
+  searchSatus?: string;
+  onClickCart?: () => void;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void
+  onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
+  onClickSearch?: () => void
 }
 
-export const Header: FC<Iheader> = ({ navLinks, onClick, onChange, onSubmit }) => {
+export const Header: FC<Iheader> = ({ navLinks, searchSatus, onClickCart, onChange, onSubmit, onClickSearch }) => {
+  
   return (
     <header className="container">
       <div className="row">
@@ -25,14 +28,14 @@ export const Header: FC<Iheader> = ({ navLinks, onClick, onChange, onSubmit }) =
               </ul>
               <div>
                 <div className="header-controls-pics">
-                  <div data-id="search-expander" className="header-controls-pic header-controls-search"></div>
+                  <div data-id="search-expander" className="header-controls-pic header-controls-search" onClick={onClickSearch}></div>
                   {/* <!-- Do programmatic navigation on click to /cart.html --> */}
-                  <div className="header-controls-pic header-controls-cart" onClick={onClick}>
+                  <div className="header-controls-pic header-controls-cart" onClick={onClickCart}>
                     <div className="header-controls-cart-full">1</div>
                     <div className="header-controls-cart-menu"></div>
                   </div>
                 </div>
-                <form data-id="search-form" className="header-controls-search-form form-inline invisible" onSubmit={onSubmit}>
+                <form data-id="search-form" className={"header-controls-search-form form-inline" + searchSatus} onSubmit={onSubmit}>
                   <input className="form-control" placeholder="Поиск" onChange={onChange}></ input>
                 </form>
               </div>

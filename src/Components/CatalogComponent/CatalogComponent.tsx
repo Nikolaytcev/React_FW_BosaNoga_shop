@@ -5,7 +5,6 @@ import { Category } from '../Category/Category';
 import { useRef, useState } from 'react';
 import { Icard } from '../../contexts/CardContext';
 
-
 export const CatalogComponent = () => {
   const [url, setUrl] = useState('http://localhost:7070/api/items');
   const [category, setCategory] = useState<number>(0);
