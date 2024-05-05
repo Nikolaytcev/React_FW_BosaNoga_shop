@@ -2,10 +2,8 @@ import { Loader } from '../Loader/Loader';
 import useJsonFetch from '../../useJsonFetch/useJsonFetch';
 import { Card } from '../Card/Card';
 
-
 export const TopSales = () => {
   const {data, loading} = useJsonFetch('http://localhost:7070/api/top-sales');
-  
   return (
     <section className="top-sales">
         <h2 className="text-center">Хиты продаж!</h2>
