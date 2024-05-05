@@ -13,7 +13,7 @@ export const Catalog = ({ onChange, onSubmit, fromFinder }: Icatalog) => {
       <form className="catalog-search-form form-inline" onSubmit={onSubmit}>
         <input className="form-control" placeholder="Поиск" defaultValue={fromFinder} onChange={onChange}></input>
       </form>
-        <CatalogComponent />
+        <CatalogComponent search={fromFinder}/>
     </section>
   )
 }

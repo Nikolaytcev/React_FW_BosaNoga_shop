@@ -5,8 +5,12 @@ import { Category } from '../Category/Category';
 import { useRef, useState } from 'react';
 import { Icard } from '../../contexts/CardContext';
 
-export const CatalogComponent = () => {
-  const [url, setUrl] = useState('http://localhost:7070/api/items');
+interface Iurl {
+  search: string
+}
+
+export const CatalogComponent = ({ search }: Iurl) => {
+  const [url, setUrl] = useState(`http://localhost:7070/api/items?q=${search}`);
   const [category, setCategory] = useState<number>(0);
   const [offset, setOffset] = useState<number>(6);
 
@@ -67,13 +71,13 @@ export const CatalogComponent = () => {
 
   const handleOnClickCategory = (e: React.MouseEvent<HTMLAnchorElement>) => {
     setCategory(Number(e.currentTarget.id));
-    setUrl(`http://localhost:7070/api/items?categoryId=${e.currentTarget.id}`);
+    setUrl(`http://localhost:7070/api/items?q=${search}&categoryId=${e.currentTarget.id}`);
     setOffset(6)
   }
   
   const handleOnClickLoad = () => {
     setOffset(offset => offset += 6)
-    setUrl(`http://localhost:7070/api/items?categoryId=${category}&offset=${offset}`)
+    setUrl(`http://localhost:7070/api/items?q=${search}&categoryId=${category}&offset=${offset}`)
   }
 
   return (
