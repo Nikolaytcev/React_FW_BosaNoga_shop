@@ -9,7 +9,7 @@ import { Home } from './pages/Home/Home';
 import { Catalog } from './pages/Catalog/Catalog';
 import { Item } from './pages/Item/Item';
 import { Cart } from './pages/Cart/Cart';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Icard } from './contexts/CardContext';
 
 const headerNavLinks = [{name: 'Главная', link: '/'},
