@@ -8,7 +8,7 @@ import { Contacts } from './pages/Contacts/Contacts';
 import { Home } from './pages/Home/Home';
 import { Catalog } from './pages/Catalog/Catalog';
 import { Item } from './pages/Item/Item';
-import { Cart } from './pages/Cart/Cart';
+import { Cart, Icart } from './pages/Cart/Cart';
 import React, { useEffect, useState } from 'react';
 import { Icard } from './contexts/CardContext';
 
@@ -43,13 +43,15 @@ function App() {
   const [url, setUrl] = useState(`http://localhost:7070/api/items?q=${change}`);
   const [category, setCategory] = useState<number>(0);
   const [offset, setOffset] = useState<number>(6);
-  const [hidden, setHidden] = useState<boolean>(false)
+  const [hidden, setHidden] = useState<boolean>(false);
+  // const [cart, setCart] = useState<Icart[]>([]);
 
   const [data, setData] = useState<Icard[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
 
   useEffect(() => {
+    setLoading(true);
     fetch(url)
       .then(response => response.json())
       .then(response => setData(prevData => prevData = chekData(prevData.concat(response), response, setHidden)))
@@ -58,7 +60,6 @@ function App() {
 
 
   const handleOnClickCategory = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    setLoading(true);
     setData([]);
     setCategory(Number(e.currentTarget.id));
     setUrl(`http://localhost:7070/api/items?q=${change}&categoryId=${e.currentTarget.id}`);
@@ -66,7 +67,6 @@ function App() {
   }
   
   const handleOnClickLoad = () => {
-    setLoading(true);
     setOffset(offset => offset += 6);
     setUrl(`http://localhost:7070/api/items?q=${change}&categoryId=${category}&offset=${offset}`);
   }
@@ -98,7 +98,6 @@ function App() {
 
   const handleOnSubmitCatalog = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true);
     setData([]);
     setUrl(`http://localhost:7070/api/items?q=${change}&categoryId=${category}`)
   }
@@ -115,7 +114,8 @@ function App() {
               onSubmit={handleOnSubmitHeader}
               onClickSearch={handleOnClickSearchBtn}
               searchSatus={searchSatus}
-              initValue={initValue}      />                       
+              initValue={initValue} />          
+                           
       <main className="container">
         <div className="row">
           <div className="col">

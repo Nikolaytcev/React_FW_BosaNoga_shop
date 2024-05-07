@@ -2,6 +2,7 @@ import { FC } from 'react'
 import logo from '../../img/header-logo.png'
 import { NavigationItem } from '../NavigationItem/NavigationItem'
 import { nanoid } from 'nanoid'
+import { fromStorage } from '../../fromStorage/fromStorage';
 
 export interface Iheader {
   navLinks: {name: string, link: string}[];
@@ -14,7 +15,9 @@ export interface Iheader {
 }
 
 export const Header: FC<Iheader> = ({ navLinks, searchSatus, initValue, onClickCart, onChange, onSubmit, onClickSearch }) => {
-  
+
+  const data =fromStorage();
+
   return (
     <header className="container">
       <div className="row">
@@ -30,9 +33,8 @@ export const Header: FC<Iheader> = ({ navLinks, searchSatus, initValue, onClickC
               <div>
                 <div className="header-controls-pics">
                   <div data-id="search-expander" className="header-controls-pic header-controls-search" onClick={onClickSearch}></div>
-                  {/* <!-- Do programmatic navigation on click to /cart.html --> */}
                   <div className="header-controls-pic header-controls-cart" onClick={onClickCart}>
-                    <div className="header-controls-cart-full">1</div>
+                    {data.length !== 0 ? <div className="header-controls-cart-full">{data.length}</div> : ''}
                     <div className="header-controls-cart-menu"></div>
                   </div>
                 </div>

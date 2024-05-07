@@ -1,13 +1,19 @@
 import { nanoid } from 'nanoid';
 import { Loader } from '../../Components/Loader/Loader';
 import useJsonFetch from '../../useJsonFetch/useJsonFetch'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useState } from 'react';
+import { fromStorage } from '../../fromStorage/fromStorage';
+
 
 export const Item = () => {
   const { id } = useParams();
-  const [count, setCount] = useState<number>(1)
+  const [count, setCount] = useState<number>(1);
+  const [selectSize, setSize] = useState<string>('');
+
+
   const {info, loading} = useJsonFetch(`http://localhost:7070/api/items/${id}`);
+  const navigate = useNavigate();
 
   const handleOnClickIncrement = () => {
     setCount(count => count < 10 ? count + 1 : 10)
@@ -19,23 +25,28 @@ export const Item = () => {
 
   const handlleOnselected = (e: React.MouseEvent<HTMLButtonElement>) => {
     const selectedEl = e.currentTarget;
-    const allSizes = selectedEl.closest('.text-center')?.querySelectorAll('.catalog-item-size');
-    const inCartBtn = selectedEl.closest('.col-7')?.querySelector('.btn-danger');
-    allSizes?.forEach(size => {
-     if (size.textContent === selectedEl.textContent) {
-      if (size.classList.contains('selected')) {
-        selectedEl.classList.remove('selected');
-        inCartBtn?.classList.add('disabled')
+    if (selectedEl.classList.contains('selected')) {
+       setSize('');
+    }
+    else {
+      setSize(selectedEl.textContent ? selectedEl.textContent : '');
+    }
+  }
+
+  const handleOnInCart = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const btnState = e.currentTarget.classList.contains('disabled');
+    if (!btnState) {
+      const data = fromStorage();
+      let filtered = data.filter(item => item.name === info?.title && item.size === selectSize);
+      if (filtered.length !== 0) {
+        data.map(item => item.name === info?.title && item.size === selectSize ? item.quantity += count : '');
       }
       else {
-        selectedEl.classList.add('selected');
-        inCartBtn?.classList.remove('disabled')
+        data.push({name: info?.title ? info.title : '', size: selectSize, quantity: count, price: info?.price ? info.price : 0});
       }
-     }
-     else {
-      size.classList.remove('selected');
-     }
-    })
+      localStorage.setItem('cart', JSON.stringify(data));
+      navigate('/cart.html');
+    }
   }
 
   return (
@@ -78,15 +89,21 @@ export const Item = () => {
           </table>
           <div className="text-center">
             <p>Размеры в наличии: 
-              {info?.sizes?.map(size => size.available? <span className="catalog-item-size" key={nanoid()} onClick={handlleOnselected}>{`${size.size}`}</span> : '')}
+              {info?.sizes?.map(size => size.available ? 
+              size.size === selectSize ? <span className="catalog-item-size selected" key={nanoid()} onClick={handlleOnselected}>{`${size.size}`}</span> : 
+              <span className="catalog-item-size" key={nanoid()} onClick={handlleOnselected}>{`${size.size}`}</span>
+               : '')}
             </p>
+            {info?.sizes?.filter(size => size.available).length !== 0 ?
             <p>Количество: <span className="btn-group btn-group-sm pl-2">
             <button className="btn btn-secondary" onClick={handleOnClickDecrement}>-</button>
             <span className="btn btn-outline-primary">{count}</span>
             <button className="btn btn-secondary" onClick={handleOnClickIncrement}>+</button>
-            </span></p>
+            </span></p>: ''}
           </div>
-          <button className='btn btn-danger btn-block btn-lg disabled'>В корзину</button>
+          {info?.sizes?.filter(size => size.available).length !== 0 ? 
+          selectSize !== '' ? <button className='btn btn-danger btn-block btn-lg' onClick={handleOnInCart}>В корзину</button> :
+          <button className='btn btn-danger btn-block btn-lg disabled' onClick={handleOnInCart}>В корзину</button> : ''}
         </div>
       </div>
     </section>}
