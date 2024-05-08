@@ -42,7 +42,7 @@ export const Item = () => {
         data.map(item => item.name === info?.title && item.size === selectSize ? item.quantity += count : '');
       }
       else {
-        data.push({name: info?.title ? info.title : '', size: selectSize, quantity: count, price: info?.price ? info.price : 0});
+        data.push({id: nanoid(), name: info?.title ? info.title : '', size: selectSize, quantity: count, price: info?.price ? info.price : 0});
       }
       localStorage.setItem('cart', JSON.stringify(data));
       navigate('/cart.html');

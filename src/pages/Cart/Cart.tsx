@@ -1,13 +1,10 @@
 import { fromStorage } from "../../fromStorage/fromStorage"
 
-export interface Icart {
-    name: string,
-    size: string,
-    quantity: number,
-    price: number
-  }
+interface Icart {
+  onDelte: (e: React.MouseEvent<HTMLButtonElement>) => void
+} 
 
-export const Cart = () => {
+export const Cart = ({ onDelte }: Icart) => {
   const data = fromStorage();
   let sum: number = 0;
   data.forEach(item => sum += item.price * item.quantity)
@@ -29,14 +26,14 @@ export const Cart = () => {
         </thead>
         <tbody>
         {data.map((item, idx) => 
-          <tr key={idx}>
+          <tr key={idx} id={item.id}>
             <td scope="row">{idx + 1}</td>
             <td><a href="/products/1.html">{item.name}</a></td>
             <td>{item.size}</td>
             <td>{item.quantity}</td>
             <td>{item.price} руб.</td>
             <td>{item.price * item.quantity} руб.</td>
-            <td><button className="btn btn-outline-danger btn-sm">Удалить</button></td>
+            <td><button className="btn btn-outline-danger btn-sm" id={item.id} onClick={onDelte}>Удалить</button></td>
           </tr>)}
           <tr>
             <td colSpan={5} className="text-right">Общая стоимость</td>

@@ -8,9 +8,10 @@ import { Contacts } from './pages/Contacts/Contacts';
 import { Home } from './pages/Home/Home';
 import { Catalog } from './pages/Catalog/Catalog';
 import { Item } from './pages/Item/Item';
-import { Cart, Icart } from './pages/Cart/Cart';
+import { Cart } from './pages/Cart/Cart';
 import React, { useEffect, useState } from 'react';
 import { Icard } from './contexts/CardContext';
+import { IfromStorage, fromStorage } from './fromStorage/fromStorage';
 
 const headerNavLinks = [{name: 'Главная', link: '/'},
                      {name: 'Каталог', link: '/catalog.html'},
@@ -44,7 +45,7 @@ function App() {
   const [category, setCategory] = useState<number>(0);
   const [offset, setOffset] = useState<number>(6);
   const [hidden, setHidden] = useState<boolean>(false);
-  // const [cart, setCart] = useState<Icart[]>([]);
+  const [, setCart] = useState<IfromStorage[]>(fromStorage());
 
   const [data, setData] = useState<Icard[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -106,6 +107,13 @@ function App() {
     navigate('/cart.html')
   }
 
+  const handleOnDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const elem = e.currentTarget.id;
+    const data = fromStorage().filter(item => item.id !== elem);
+    localStorage.setItem('cart', JSON.stringify(data));
+    setCart(data);
+  }
+
   return (
     <>
       <Header navLinks={headerNavLinks}
@@ -115,7 +123,7 @@ function App() {
               onClickSearch={handleOnClickSearchBtn}
               searchSatus={searchSatus}
               initValue={initValue} />          
-                           
+
       <main className="container">
         <div className="row">
           <div className="col">
@@ -123,7 +131,7 @@ function App() {
             <Routes>
               <Route path='/' element={<Home catalogInfo={{data: data, loading: loading, category: category, offset: offset, hidden: hidden, handleOnClickCategory, handleOnClickLoad}}/>} />
               <Route path='/catalog/:id.html' element={<Item />}/>
-              <Route path='/cart.html' element={<Cart />}/>
+              <Route path='/cart.html' element={<Cart onDelte={handleOnDelete}/>}/>
               <Route path='/catalog.html' element={<Catalog onChange={handleOnChange} onSubmit={handleOnSubmitCatalog} fromSearch={change}
                                           catalogInfo={{data: data, loading: loading, category: category, offset: offset, hidden: hidden, handleOnClickCategory, handleOnClickLoad}}/>} />
               <Route path='/about.html' element={<About />}/>
