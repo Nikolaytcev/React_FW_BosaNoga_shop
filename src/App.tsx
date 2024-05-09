@@ -110,7 +110,7 @@ function App() {
        }
    }
    fetchData()
- }, [url, navigate, order, queryType])
+ }, [url])
 
 
   const handleOnClickCategory = (e: React.MouseEvent<HTMLAnchorElement>) => {
