@@ -1,15 +1,24 @@
+import { Iform } from "../../App";
+import { Loader } from "../../Components/Loader/Loader";
 import { fromStorage } from "../../fromStorage/fromStorage"
 
 interface Icart {
-  onDelte: (e: React.MouseEvent<HTMLButtonElement>) => void
+  onDelte: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onSubmit: (e: React.ChangeEvent<HTMLFormElement>) => void;
+  form: Iform;
+  loading: boolean,
+  status: number
 } 
 
-export const Cart = ({ onDelte }: Icart) => {
+export const Cart = ({ onDelte, onChange, onSubmit, form, loading, status }: Icart) => {
+  const { phone, address, policy } = form;
   const data = fromStorage();
   let sum: number = 0;
   data.forEach(item => sum += item.price * item.quantity)
+
   return (
-    <>
+    <> 
     <section className="cart">
       <h2 className="text-center">Корзина</h2>
       <table className="table table-bordered">
@@ -43,26 +52,30 @@ export const Cart = ({ onDelte }: Icart) => {
       
       </table>
     </section>
+    {loading ? <Loader/> : status === 0 ? 
     <section className="order">
       <h2 className="text-center">Оформить заказ</h2>
       <div className="card" style={{maxWidth: '30rem', margin: '0 auto'}}>
-        <form className="card-body">
+        <form className="card-body" onSubmit={onSubmit}>
           <div className="form-group">
             <label htmlFor="phone">Телефон</label>
-            <input className="form-control" id="phone" placeholder="Ваш телефон"/>
+            <input className="form-control" name="phone" type="tel" id="phone" placeholder="Ваш телефон" onChange={onChange} value={phone}/>
           </div>
           <div className="form-group">
             <label htmlFor="address">Адрес доставки</label>
-            <input className="form-control" id="address" placeholder="Адрес доставки"/>
+            <input type="text" className="form-control" name="address" id="address" placeholder="Адрес доставки" onChange={onChange} value={address}/>
           </div>
           <div className="form-group form-check">
-            <input type="checkbox" className="form-check-input" id="agreement"/>
+            <input type="checkbox" className="form-check-input" name="policy" id="agreement" checked={policy} onChange={onChange} />
             <label className="form-check-label" htmlFor="agreement">Согласен с правилами доставки</label>
           </div>
-          <button type="submit" className="btn btn-outline-secondary">Оформить</button>
+          {phone !== ''&& address !== '' && policy && data.length !== 0 ?
+            <button type="submit" className="btn btn-outline-secondary" >Оформить</button> : 
+            <button type="submit" className="btn btn-outline-secondary" disabled >Оформить</button>
+          }
         </form>
       </div>
-    </section>
+    </section> : "Ваш заказ оформлен!"}
     </>
   )
 }

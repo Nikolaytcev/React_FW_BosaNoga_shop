@@ -3,15 +3,18 @@ import { Loader } from '../../Components/Loader/Loader';
 import useJsonFetch from '../../useJsonFetch/useJsonFetch'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useState } from 'react';
-import { fromStorage } from '../../fromStorage/fromStorage';
+import { IfromStorage, fromStorage } from '../../fromStorage/fromStorage';
 
+interface Iitem {
+  setCart: (e: React.SetStateAction<IfromStorage[]>) => void
+}
 
-export const Item = () => {
+export const Item = ({ setCart }: Iitem) => {
   const { id } = useParams();
   const [count, setCount] = useState<number>(1);
   const [selectSize, setSize] = useState<string>('');
 
-
+  
   const {info, loading} = useJsonFetch(`http://localhost:7070/api/items/${id}`);
   const navigate = useNavigate();
 
@@ -44,6 +47,7 @@ export const Item = () => {
       else {
         data.push({id: nanoid(), name: info?.title ? info.title : '', size: selectSize, quantity: count, price: info?.price ? info.price : 0});
       }
+      setCart(data);
       localStorage.setItem('cart', JSON.stringify(data));
       navigate('/cart.html');
     }
