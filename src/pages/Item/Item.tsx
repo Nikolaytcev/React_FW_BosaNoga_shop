@@ -40,7 +40,7 @@ export const Item = ({ setCart }: Iitem) => {
     const btnState = e.currentTarget.classList.contains('disabled');
     if (!btnState) {
       const data = fromStorage();
-      let filtered = data.filter(item => item.name === info?.title && item.size === selectSize);
+      const filtered = data.filter(item => item.name === info?.title && item.size === selectSize);
       if (filtered.length !== 0) {
         data.map(item => item.name === info?.title && item.size === selectSize ? item.quantity += count : '');
       }

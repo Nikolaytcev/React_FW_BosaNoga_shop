@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Icard } from '../contexts/CardContext';
-import { useNavigate } from 'react-router-dom';
+
 
 export default function useJsonFetch (url: string, opts?: {method: string}) {
   const [data, setData] = useState<Icard[]>([]);
   const [info, setInfo] = useState<Icard>();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error>()
-
-  const navigate = useNavigate();
 
   useEffect(() => {
      async function fetchData () {

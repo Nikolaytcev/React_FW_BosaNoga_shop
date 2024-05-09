@@ -1,4 +1,4 @@
-import { Routes, Route, useNavigate, Form } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import './App.css'
 import { Banner } from './Components/Banner/Banner';
 import { Footer } from './Components/Footer/Footer';
@@ -89,13 +89,13 @@ function App() {
               body: JSON.stringify(order)
             });
             if (!res.ok) {throw new Error(res.statusText)}
-            setQueryType('GET');
-            setFetchStatus(res.status);
+            setQueryType('GET')
+            setFetchStatus(res.status)
            }
            else {
             const res = await fetch(url);
-            if (!res.ok) {throw new Error(res.statusText)};
-            const resJson = await res.json();
+            if (!res.ok) {throw new Error(res.statusText)}
+            const resJson = await res.json()
             setData(prevData => prevData = chekData(prevData.concat(resJson), resJson, setHidden))
            }
        }
@@ -110,7 +110,7 @@ function App() {
        }
    }
    fetchData()
- }, [url])
+ }, [url, navigate, order, queryType])
 
 
   const handleOnClickCategory = (e: React.MouseEvent<HTMLAnchorElement>) => {
