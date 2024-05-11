@@ -1,14 +1,11 @@
 import { Loader } from '../Loader/Loader';
 import { Card } from '../Card/Card';
-import { useContext, useEffect } from 'react';
-import { AppContext } from '../../contexts/AppContext';
+import useJsonFetch from '../../useJsonFetch/useJsonFetch';
 
 export const TopSales = () => {
-  const {topSales, loading, categories, setUrl } = useContext(AppContext);
 
-  useEffect (() => {
-    setUrl('http://localhost:7070/api/top-sales')
-  }, [categories.length])
+  const {topSales, loading} = useJsonFetch('http://localhost:7070/api/top-sales')
+
    return (
     <section className="top-sales">
         <h2 className="text-center">Хиты продаж!</h2>

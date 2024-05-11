@@ -19,11 +19,9 @@ interface IitemOrder {
 
 export interface Iapp {
     data: Icard[],
-    topSales: Icard[],
     info: Icard | undefined,
     loading: boolean,
     category: number,
-    categories: {id: number, title: string}[],
     offset: number,
     hidden: boolean,
     change: string,
@@ -53,16 +51,15 @@ export interface Iapp {
     handlleOnselected: (e: React.MouseEvent<HTMLButtonElement>) => void,
     handleOnInCart: (e: React.MouseEvent<HTMLButtonElement>) => void,
     setCart: (e: React.SetStateAction<IfromStorage[]>) => void,
-    setUrl: (e: React.SetStateAction<string>) => void
+    setUrl: (e: React.SetStateAction<string>) => void,
+    setError: (e: React.SetStateAction<Error | undefined>) => void
   }
 
   const catalogComponentContext = {
     data: [],
-    topSales: [],
     info: {id: 0, title: ''},
     loading: true,
     category: 0,
-    categories: [],
     offset: 0,
     hidden: false,
     change: '',
@@ -92,7 +89,8 @@ export interface Iapp {
     handlleOnselected: () => {},
     handleOnInCart: () => {},
     setCart: () => {},
-    setUrl: () => {}
+    setUrl: () => {},
+    setError: () => {}
   }
 
 

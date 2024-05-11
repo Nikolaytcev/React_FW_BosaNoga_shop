@@ -43,7 +43,6 @@ export const AppProvider: FC<PropsWithChildren> = ({ children }) => {
     const [change, setChange] = useState<string>('');
     const [url, setUrl] = useState('http://localhost:7070/api/items?q=');
     const [category, setCategory] = useState<number>(0);
-    const [categories, setCategories] = useState<{id: number, title: string}[]>([])
     const [offset, setOffset] = useState<number>(6);
     const [hidden, setHidden] = useState<boolean>(false);
     const [order, setOrder] = useState<Iorder>({owner: {phone: '', address: ''}, items: [{id: 0, price: 0, count: 0}]});
@@ -58,7 +57,6 @@ export const AppProvider: FC<PropsWithChildren> = ({ children }) => {
     const [selectSize, setSize] = useState<string>('');
 
     const [data, setData] = useState<Icard[]>([]);
-    const [topSales, setTopSales] = useState<Icard[]>([]);
     const [info, setInfo] = useState<Icard>();
     const [loading, setLoading] = useState<boolean>(true);
 
@@ -83,16 +81,9 @@ export const AppProvider: FC<PropsWithChildren> = ({ children }) => {
           }
           else {
             const res = await fetch(url);
-            if (!res.ok) {throw new Error(res.statusText)}
+            if (!res.ok) {throw new Error(res.status.toString())}
             const resJson = await res.json()
-            
-            if (url.includes('top-sales')) {
-              setTopSales(resJson)
-            }
-            else if (url.includes('categories')) {
-              setCategories(resJson)
-            }
-            else if (!url.includes('?')) {
+            if (!url.includes('?')) {
               setInfo(resJson)
             }
             else {
@@ -245,13 +236,13 @@ export const AppProvider: FC<PropsWithChildren> = ({ children }) => {
                     };
     
     const variables = {data, info, loading, change,
-                       url, category, categories, offset,
+                       url, category, offset,
                        hidden, order, fetchStatus, queryType,
                        error, initValue, form, searchSatus,
-                       cart, count, selectSize, topSales}
+                       cart, count, selectSize}
     
   return (
-    <AppContext.Provider value={{...variables, ...handlers, setCart, setUrl}}>
+    <AppContext.Provider value={{...variables, ...handlers, setCart, setUrl, setError}}>
         {children}
     </AppContext.Provider>
   )

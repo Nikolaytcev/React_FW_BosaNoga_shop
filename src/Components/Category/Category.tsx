@@ -1,18 +1,16 @@
 
 import { Link } from 'react-router-dom';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { AppContext } from '../../contexts/AppContext';
+import useJsonFetch from '../../useJsonFetch/useJsonFetch';
 
 export const Category = () => {
-  const { categories, category, handleOnClickCategory, setUrl, url} = useContext(AppContext);
-
-  useEffect(() => {
-    setUrl('http://localhost:7070/api/categories')
-  }, [url])
+  const { category, handleOnClickCategory} = useContext(AppContext);
+  const { categories, loading } = useJsonFetch('http://localhost:7070/api/categories')
 
   return (
     <>
-      {categories.length !== 0 ? 
+      {!loading  && categories.length !== 1? 
       <ul className="catalog-categories nav justify-content-center">
         <li className="nav-item">
           {category === 0 ? <Link className="nav-link active" to='#' id='0' onClick={handleOnClickCategory}>Все</Link> : 
