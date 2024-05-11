@@ -41,9 +41,9 @@ function chekData (Alldata : Icard[], data: Icard[], setHidden: (e: React.SetSta
 
 export const AppProvider: FC<PropsWithChildren> = ({ children }) => {
     const [change, setChange] = useState<string>('');
-    const [url, setUrl] = useState(`http://localhost:7070/api/items?q=${change}`);
+    const [url, setUrl] = useState('http://localhost:7070/api/items?q=');
     const [category, setCategory] = useState<number>(0);
-    const [categores, setCategores] = useState<{id: number, title: string}[]>([])
+    const [categories, setCategories] = useState<{id: number, title: string}[]>([])
     const [offset, setOffset] = useState<number>(6);
     const [hidden, setHidden] = useState<boolean>(false);
     const [order, setOrder] = useState<Iorder>({owner: {phone: '', address: ''}, items: [{id: 0, price: 0, count: 0}]});
@@ -58,6 +58,7 @@ export const AppProvider: FC<PropsWithChildren> = ({ children }) => {
     const [selectSize, setSize] = useState<string>('');
 
     const [data, setData] = useState<Icard[]>([]);
+    const [topSales, setTopSales] = useState<Icard[]>([]);
     const [info, setInfo] = useState<Icard>();
     const [loading, setLoading] = useState<boolean>(true);
 
@@ -84,17 +85,18 @@ export const AppProvider: FC<PropsWithChildren> = ({ children }) => {
             const res = await fetch(url);
             if (!res.ok) {throw new Error(res.statusText)}
             const resJson = await res.json()
-            if (!url.includes('?') && !url.includes('categories')) {
+            
+            if (url.includes('top-sales')) {
+              setTopSales(resJson)
+            }
+            else if (url.includes('categories')) {
+              setCategories(resJson)
+            }
+            else if (!url.includes('?')) {
               setInfo(resJson)
             }
             else {
-              if (url.includes('categories')) {
-                setCategores(resJson)
-              }
-              else {
-                setData(prevData => prevData = chekData(prevData.concat(resJson), resJson, setHidden))
-              }
-              
+              setData(prevData => prevData = chekData(prevData.concat(resJson), resJson, setHidden))
             }
           }
         }
@@ -243,10 +245,10 @@ export const AppProvider: FC<PropsWithChildren> = ({ children }) => {
                     };
     
     const variables = {data, info, loading, change,
-                       url, category, categores, offset,
+                       url, category, categories, offset,
                        hidden, order, fetchStatus, queryType,
                        error, initValue, form, searchSatus,
-                       cart, count, selectSize}
+                       cart, count, selectSize, topSales}
     
   return (
     <AppContext.Provider value={{...variables, ...handlers, setCart, setUrl}}>

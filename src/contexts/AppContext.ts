@@ -19,10 +19,11 @@ interface IitemOrder {
 
 export interface Iapp {
     data: Icard[],
+    topSales: Icard[],
     info: Icard | undefined,
     loading: boolean,
     category: number,
-    categores: {id: number, title: string}[],
+    categories: {id: number, title: string}[],
     offset: number,
     hidden: boolean,
     change: string,
@@ -57,10 +58,11 @@ export interface Iapp {
 
   const catalogComponentContext = {
     data: [],
+    topSales: [],
     info: {id: 0, title: ''},
     loading: true,
     category: 0,
-    categores: [],
+    categories: [],
     offset: 0,
     hidden: false,
     change: '',

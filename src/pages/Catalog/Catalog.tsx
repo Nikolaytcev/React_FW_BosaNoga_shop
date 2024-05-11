@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { CatalogComponent } from '../../Components/CatalogComponent/CatalogComponent'
 import { AppContext } from '../../contexts/AppContext';
+import { Category } from '../../Components/Category/Category';
 
 export const Catalog = () => {
   const { handleOnChange, handleOnSubmitCatalog, change } = useContext(AppContext);
@@ -10,6 +11,7 @@ export const Catalog = () => {
       <form className="catalog-search-form form-inline" onSubmit={handleOnSubmitCatalog}>
         <input className="form-control" placeholder="Поиск" defaultValue={change} onChange={handleOnChange}></input>
       </form>
+        <Category />
         <CatalogComponent/>
     </section>
   )

@@ -1,15 +1,14 @@
 import { Loader } from '../Loader/Loader'
-import { Category } from '../Category/Category';
 import { Card } from '../Card/Card';
 import { useContext } from 'react';
 import { AppContext } from '../../contexts/AppContext';
 
 export const CatalogComponent = () => {
- const {data, loading, offset, hidden, handleOnClickLoad} = useContext(AppContext)
+
+ const {data, loading, offset, hidden, handleOnClickLoad} = useContext(AppContext);
 
  return (
     <>
-    <Category />
     <div className="text-center">
       {loading && offset === 6 ? <Loader/> : 
         <div className='row'>

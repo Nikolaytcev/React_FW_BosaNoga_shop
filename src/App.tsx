@@ -32,7 +32,7 @@ function App() {
       <Header navLinks={headerNavLinks} />          
       <main className="container">
         <div className="row">
-          <div className="col">
+          <div className="col"> 
             <Banner />
             <Routes>
               <Route path='/' element={<Home />} />
@@ -41,6 +41,7 @@ function App() {
               <Route path='/catalog.html' element={<Catalog />} />
               <Route path='/about.html' element={<About />}/>
               <Route path='/contacts.html' element={<Contacts />}/>
+              <Route path='*' element={<NotFound/>}/>
               {error !== undefined ? <Route path='/404.html' element={<NotFound/>}/> : ''}
             </Routes>
           </div>

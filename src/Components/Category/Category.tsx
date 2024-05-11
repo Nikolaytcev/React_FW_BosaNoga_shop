@@ -4,7 +4,7 @@ import { useContext, useEffect } from 'react';
 import { AppContext } from '../../contexts/AppContext';
 
 export const Category = () => {
-  const { categores, category, handleOnClickCategory, setUrl, url} = useContext(AppContext);
+  const { categories, category, handleOnClickCategory, setUrl, url} = useContext(AppContext);
 
   useEffect(() => {
     setUrl('http://localhost:7070/api/categories')
@@ -12,13 +12,13 @@ export const Category = () => {
 
   return (
     <>
-      {categores.length !== 0 ? 
+      {categories.length !== 0 ? 
       <ul className="catalog-categories nav justify-content-center">
         <li className="nav-item">
           {category === 0 ? <Link className="nav-link active" to='#' id='0' onClick={handleOnClickCategory}>Все</Link> : 
           <Link className="nav-link" to='#' id='0' onClick={handleOnClickCategory}>Все</Link>}
         </li>
-        {categores.map(cat => 
+        {categories.map(cat => 
         <li className="nav-item" key={cat.id}>
           {category === cat.id ? <Link className= "nav-link active" to='#' id={cat.id.toString()} key={cat.id} onClick={handleOnClickCategory}>{cat.title}</Link> : 
           <Link className= "nav-link" to='#' id={cat.id.toString()} key={cat.id} onClick={handleOnClickCategory}>{cat.title}</Link>} 
