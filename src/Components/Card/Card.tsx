@@ -1,5 +1,20 @@
 import { FC } from 'react'
-import { Icard } from '../../contexts/CardContext';
+
+export interface Icard {
+  id: number,
+  category?: number,
+  title: string,
+  images?: string[],
+  sku?: string,
+  manufacturer?: string,
+  color?: string,
+  material?: string,
+  reason?: string,
+  season?: string,
+  heelSize?: string,
+  price?: number,
+  oldPrice?: number,
+  sizes?: {size: string, available: boolean}[]}
 
 export const Card: FC<Icard> = ({id, images, title, price}) => {
   return (

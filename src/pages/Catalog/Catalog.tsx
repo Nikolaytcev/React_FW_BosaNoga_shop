@@ -1,20 +1,16 @@
-import { CatalogComponent, Iurl } from '../../Components/CatalogComponent/CatalogComponent'
+import { useContext } from 'react';
+import { CatalogComponent } from '../../Components/CatalogComponent/CatalogComponent'
+import { AppContext } from '../../contexts/AppContext';
 
-interface Icatalog {
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-  fromSearch: string,
-  catalogInfo: Iurl
-}
-
-export const Catalog = ({ onChange, onSubmit, fromSearch, catalogInfo }: Icatalog) => {
+export const Catalog = () => {
+  const { handleOnChange, handleOnSubmitCatalog, change } = useContext(AppContext);
   return (
     <section className="catalog">
       <h2 className="text-center">Каталог</h2>
-      <form className="catalog-search-form form-inline" onSubmit={onSubmit}>
-        <input className="form-control" placeholder="Поиск" defaultValue={fromSearch} onChange={onChange}></input>
+      <form className="catalog-search-form form-inline" onSubmit={handleOnSubmitCatalog}>
+        <input className="form-control" placeholder="Поиск" defaultValue={change} onChange={handleOnChange}></input>
       </form>
-        <CatalogComponent {...catalogInfo}/>
+        <CatalogComponent/>
     </section>
   )
 }

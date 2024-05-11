@@ -1,27 +1,27 @@
 
 import { Link } from 'react-router-dom';
-import useJsonFetch from '../../useJsonFetch/useJsonFetch';
+import { useContext, useEffect } from 'react';
+import { AppContext } from '../../contexts/AppContext';
 
-interface Icategory {
-  category: number;
-  onClick: (e: React.MouseEvent<HTMLAnchorElement>) => void
-}
+export const Category = () => {
+  const { categores, category, handleOnClickCategory, setUrl, url} = useContext(AppContext);
 
-export const Category = ({ category, onClick }: Icategory) => {
-  const { data } = useJsonFetch(' http://localhost:7070/api/categories');
+  useEffect(() => {
+    setUrl('http://localhost:7070/api/categories')
+  }, [url])
 
   return (
     <>
-      {data.length !== 0 ? 
+      {categores.length !== 0 ? 
       <ul className="catalog-categories nav justify-content-center">
         <li className="nav-item">
-          {category === 0 ? <Link className="nav-link active" to='#' id='0' onClick={onClick}>Все</Link> : 
-          <Link className="nav-link" to='#' id='0' onClick={onClick}>Все</Link>}
+          {category === 0 ? <Link className="nav-link active" to='#' id='0' onClick={handleOnClickCategory}>Все</Link> : 
+          <Link className="nav-link" to='#' id='0' onClick={handleOnClickCategory}>Все</Link>}
         </li>
-        {data.map(cat => 
+        {categores.map(cat => 
         <li className="nav-item" key={cat.id}>
-          {category === cat.id ? <Link className= "nav-link active" to='#' id={cat.id.toString()} key={cat.id} onClick={onClick}>{cat.title}</Link> : 
-          <Link className= "nav-link" to='#' id={cat.id.toString()} key={cat.id} onClick={onClick}>{cat.title}</Link>} 
+          {category === cat.id ? <Link className= "nav-link active" to='#' id={cat.id.toString()} key={cat.id} onClick={handleOnClickCategory}>{cat.title}</Link> : 
+          <Link className= "nav-link" to='#' id={cat.id.toString()} key={cat.id} onClick={handleOnClickCategory}>{cat.title}</Link>} 
         </li>)}
       </ul> : ''}
     </>

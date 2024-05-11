@@ -1,23 +1,15 @@
 import { Loader } from '../Loader/Loader'
 import { Category } from '../Category/Category';
-import { Icard } from '../../contexts/CardContext';
 import { Card } from '../Card/Card';
+import { useContext } from 'react';
+import { AppContext } from '../../contexts/AppContext';
 
-export interface Iurl {
-  data: Icard[],
-  loading: boolean,
-  category: number,
-  offset: number,
-  hidden: boolean,
-  handleOnClickCategory: (e: React.MouseEvent<HTMLAnchorElement>) => void;
-  handleOnClickLoad: () => void
-}
-
-export const CatalogComponent = ({data, loading, category, offset, hidden, handleOnClickCategory, handleOnClickLoad }: Iurl) => {
+export const CatalogComponent = () => {
+ const {data, loading, offset, hidden, handleOnClickLoad} = useContext(AppContext)
 
  return (
     <>
-    <Category category={category} onClick={handleOnClickCategory}/>
+    <Category />
     <div className="text-center">
       {loading && offset === 6 ? <Loader/> : 
         <div className='row'>

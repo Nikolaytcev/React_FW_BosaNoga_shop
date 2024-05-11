@@ -1,58 +1,22 @@
 import { nanoid } from 'nanoid';
 import { Loader } from '../../Components/Loader/Loader';
-import useJsonFetch from '../../useJsonFetch/useJsonFetch'
-import { useNavigate, useParams } from 'react-router-dom'
-import { useState } from 'react';
-import { IfromStorage, fromStorage } from '../../fromStorage/fromStorage';
+import { useParams } from 'react-router-dom'
+import { useContext, useEffect } from 'react';
 
-interface Iitem {
-  setCart: (e: React.SetStateAction<IfromStorage[]>) => void
-}
+import { AppContext } from '../../contexts/AppContext';
 
-export const Item = ({ setCart }: Iitem) => {
+export const Item = () => {
+  const { setUrl, handleOnClickIncrement,
+                  handleOnClickDecrement,
+                  handlleOnselected,
+                  handleOnInCart,
+                  selectSize, info, loading, url, count,} = useContext(AppContext);
   const { id } = useParams();
-  const [count, setCount] = useState<number>(1);
-  const [selectSize, setSize] = useState<string>('');
 
+  useEffect(() => {
+    setUrl(`http://localhost:7070/api/items/${id}`)
+  }, [url])
   
-  const {info, loading} = useJsonFetch(`http://localhost:7070/api/items/${id}`);
-  const navigate = useNavigate();
-
-  const handleOnClickIncrement = () => {
-    setCount(count => count < 10 ? count + 1 : 10)
-  }
-
-  const handleOnClickDecrement = () => {
-    setCount(count => count > 1 ? count - 1 : 1)
-  }
-
-  const handlleOnselected = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const selectedEl = e.currentTarget;
-    if (selectedEl.classList.contains('selected')) {
-       setSize('');
-    }
-    else {
-      setSize(selectedEl.textContent ? selectedEl.textContent : '');
-    }
-  }
-
-  const handleOnInCart = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const btnState = e.currentTarget.classList.contains('disabled');
-    if (!btnState) {
-      const data = fromStorage();
-      const filtered = data.filter(item => item.name === info?.title && item.size === selectSize);
-      if (filtered.length !== 0) {
-        data.map(item => item.name === info?.title && item.size === selectSize ? item.quantity += count : '');
-      }
-      else {
-        data.push({id: nanoid(), name: info?.title ? info.title : '', size: selectSize, quantity: count, price: info?.price ? info.price : 0});
-      }
-      setCart(data);
-      localStorage.setItem('cart', JSON.stringify(data));
-      navigate('/cart.html');
-    }
-  }
-
   return (
     <>
     {loading ? <Loader/> : 

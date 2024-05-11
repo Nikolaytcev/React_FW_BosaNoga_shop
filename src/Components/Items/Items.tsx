@@ -1,14 +1,10 @@
-import { CatalogComponent, Iurl } from "../CatalogComponent/CatalogComponent"
+import { CatalogComponent } from "../CatalogComponent/CatalogComponent"
 
-interface Iitems {
-    catalogInfo: Iurl
-}
-
-export const Items = ({ catalogInfo }: Iitems) => {
+export const Items = () => {
   return (
     <section className="catalog">
         <h2 className="text-center">Каталог</h2>
-        <CatalogComponent {...catalogInfo}/>
+        <CatalogComponent />
     </section>
   )
 }
