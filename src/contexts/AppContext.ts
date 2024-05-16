@@ -1,7 +1,7 @@
 import { createContext } from "react";
 import { IfromStorage } from "../fromStorage/fromStorage";
-import { Icard } from "../Components/Card/Card";
 import { Iform } from "../providers/AppProvider";
+import { Icard } from "../Components/Card/Card";
 
 interface IitemOrder {
     id: number,
@@ -23,7 +23,7 @@ export interface Iapp {
     loading: boolean,
     category: number,
     offset: number,
-    hidden: boolean,
+    isLoadedAll: boolean,
     change: string,
     url: string,
     order: Iorder,
@@ -37,7 +37,7 @@ export interface Iapp {
     count: number;
     selectSize: string,
     handleOnClickCategory: (e: React.MouseEvent<HTMLAnchorElement>) => void,
-    handleOnClickLoad: () => void,
+    fetchMoreProducts: () => void,
     handleOnSubmit: (e: React.ChangeEvent<HTMLFormElement>) => void,
     handleOnDelete: (e: React.MouseEvent<HTMLButtonElement>) => void,
     handleOnClickCart: () => void,
@@ -61,7 +61,7 @@ export interface Iapp {
     loading: true,
     category: 0,
     offset: 0,
-    hidden: false,
+    isLoadedAll: false,
     change: '',
     url: '',
     order: {owner: {phone: '', address: ''}, items: [{id: 0, price: 0, count: 0}]},
@@ -75,7 +75,7 @@ export interface Iapp {
     count: 1,
     selectSize: '',
     handleOnClickCategory: () => {},
-    handleOnClickLoad: () => {},
+    fetchMoreProducts: () => {},
     handleOnSubmit: () => {},
     handleOnDelete: () => {},
     handleOnClickCart: () => {},

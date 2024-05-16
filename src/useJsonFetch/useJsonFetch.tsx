@@ -1,10 +1,8 @@
 import { useContext, useEffect, useState } from 'react'
-import { Icard } from '../Components/Card/Card';
-import { AppContext } from '../contexts/AppContext';
+import { AppContext, Icard } from '../contexts/AppContext';
 
-export default function useJsonFetch (url: string, opts?: {method: string}) {
-  const [topSales, setTopSales] = useState<Icard[]>([{id: 0, title: ''}]);
-  const [categories, setCategories] = useState<{id: number, title: string}[]>([{id: 0, title: ''}])
+export default function useJsonFetch (url: string) {
+  const [data, setData] = useState<Icard[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   const { setError } = useContext(AppContext);
@@ -12,19 +10,17 @@ export default function useJsonFetch (url: string, opts?: {method: string}) {
   useEffect(() => {
     async function fetchData () {
         try {
-            const res = await fetch(url, opts);
+            const res = await fetch(url);
             if (!res.ok) {throw new Error(res.statusText)}
             const resJson = await res.json();
-            if (url.includes('categories')) {
-                setCategories(resJson)
-            }
-            else {
-                setTopSales(resJson)
-            }
+            setData(resJson)
         }
         catch(e) {
             if (e instanceof Error) {
                 setError(e)
+            } else {
+                const error = new Error('unknown error')
+                setError(error)
             }
         }
         finally {
@@ -32,6 +28,6 @@ export default function useJsonFetch (url: string, opts?: {method: string}) {
         }
     }
     fetchData()
-  }, [url, opts])
-  return {topSales, categories, loading}
+  }, [url, setError])
+  return {data, loading}
 }

@@ -5,7 +5,7 @@ import { AppContext } from '../../contexts/AppContext';
 
 export const CatalogComponent = () => {
 
- const {data, loading, offset, hidden, handleOnClickLoad} = useContext(AppContext);
+ const {data, loading, offset, isLoadedAll, fetchMoreProducts} = useContext(AppContext);
 
  return (
     <>
@@ -20,10 +20,10 @@ export const CatalogComponent = () => {
         {loading && offset !== 6 ? 
         <>
           <Loader/> 
-          <button className='btn btn-outline-primary' disabled onClick={handleOnClickLoad}>Загрузить ещё</button>
+          <button className='btn btn-outline-primary' disabled onClick={fetchMoreProducts}>Загрузить ещё</button>
         </> : ''}
-        {!loading ? hidden ? <button className='btn btn-outline-primary' hidden onClick={handleOnClickLoad}>Загрузить ещё</button> : 
-              <button className='btn btn-outline-primary' onClick={handleOnClickLoad}>Загрузить ещё</button>: ''}
+        {!loading ? isLoadedAll ? <button className='btn btn-outline-primary' hidden onClick={fetchMoreProducts}>Загрузить ещё</button> : 
+              <button className='btn btn-outline-primary' onClick={fetchMoreProducts}>Загрузить ещё</button>: ''}
     </div>
     </>
   )

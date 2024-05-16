@@ -2,8 +2,8 @@ import { FC, PropsWithChildren, useEffect, useState } from "react"
 import { AppContext } from "../contexts/AppContext"
 import { useNavigate } from "react-router-dom";
 import { IfromStorage, fromStorage } from "../fromStorage/fromStorage";
-import { Icard } from "../Components/Card/Card";
 import { nanoid } from "nanoid";
+import { Icard } from "../Components/Card/Card";
 
 export interface Iform {
   phone: string,
@@ -44,7 +44,7 @@ export const AppProvider: FC<PropsWithChildren> = ({ children }) => {
     const [url, setUrl] = useState('http://localhost:7070/api/items?q=');
     const [category, setCategory] = useState<number>(0);
     const [offset, setOffset] = useState<number>(6);
-    const [hidden, setHidden] = useState<boolean>(false);
+    const [isLoadedAll, setLoadedAll] = useState<boolean>(false);
     const [order, setOrder] = useState<Iorder>({owner: {phone: '', address: ''}, items: [{id: 0, price: 0, count: 0}]});
     const [fetchStatus, setFetchStatus] = useState<number>(0);
     const [queryType, setQueryType] = useState<string>('GET');
@@ -87,7 +87,7 @@ export const AppProvider: FC<PropsWithChildren> = ({ children }) => {
               setInfo(resJson)
             }
             else {
-              setData(prevData => prevData = chekData(prevData.concat(resJson), resJson, setHidden))
+              setData(prevData => prevData = chekData(prevData.concat(resJson), resJson, setLoadedAll))
             }
           }
         }
@@ -111,7 +111,7 @@ export const AppProvider: FC<PropsWithChildren> = ({ children }) => {
         setOffset(6);
     }
       
-    const handleOnClickLoad = () => {
+    const fetchMoreProducts = () => {
         setOffset(offset => offset += 6);
         setUrl(`http://localhost:7070/api/items?q=${change}&categoryId=${category}&offset=${offset}`);
     }
@@ -220,7 +220,7 @@ export const AppProvider: FC<PropsWithChildren> = ({ children }) => {
     }
 
     const handlers = {handleOnClickCategory,
-                      handleOnClickLoad,
+                      fetchMoreProducts,
                       handleOnSubmit,
                       handleOnDelete,
                       handleOnClickCart,
@@ -237,7 +237,7 @@ export const AppProvider: FC<PropsWithChildren> = ({ children }) => {
     
     const variables = {data, info, loading, change,
                        url, category, offset,
-                       hidden, order, fetchStatus, queryType,
+                       isLoadedAll, order, fetchStatus, queryType,
                        error, initValue, form, searchSatus,
                        cart, count, selectSize}
     

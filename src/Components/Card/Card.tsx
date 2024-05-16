@@ -1,4 +1,5 @@
 import { FC } from 'react'
+import { Link } from 'react-router-dom'
 
 export interface Icard {
   id: number,
@@ -23,7 +24,7 @@ export const Card: FC<Icard> = ({id, images, title, price}) => {
         <div className="card-body">
             <p className="card-text">{title}</p>
             <p className="card-text">{price} руб.</p>
-            <a href={`/catalog/${id}.html`} className="btn btn-outline-primary" id={id.toString()}>Заказать</a>
+            <Link to={`/catalog/${id}.html`} className="btn btn-outline-primary" id={id.toString()}>Заказать</Link>
         </div>
     </div>
   )

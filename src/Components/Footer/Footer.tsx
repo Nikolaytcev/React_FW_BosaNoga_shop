@@ -1,7 +1,6 @@
 import { FC } from 'react'
 import { Iheader } from '../Header/Header'
 import { NavigationItem } from '../NavigationItem/NavigationItem'
-import { nanoid } from 'nanoid'
 
 export const Footer: FC<Iheader> = ({ navLinks }) => {
   return (
@@ -11,7 +10,7 @@ export const Footer: FC<Iheader> = ({ navLinks }) => {
           <section>
             <h5>Информация</h5>
             <ul className="nav flex-column">
-                {navLinks.map(link => <NavigationItem name={link.name} link={link.link} key={nanoid()}/>)}
+                {navLinks.map((link, i) => <NavigationItem name={link.name} link={link.link} key={i}/>)}
             </ul>
           </section>
         </div>
