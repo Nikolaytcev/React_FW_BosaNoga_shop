@@ -12,18 +12,19 @@ export const Cart = () => {
   const data = fromStorage();
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(true);
+  const [newPage, setNewPage] = useState<boolean>(true);
 
 
   let sum: number = 0;
   data.forEach(item => sum += item.price * item.quantity)
 
   useEffect(() => {
-    setFetchStatus(0);
-    setForm({phone: '', address: '', policy: false});
-  }, [])
-
-  useEffect(() => {
-    setLoading(true)
+    setLoading(true);
+    if (newPage) {
+      setFetchStatus(0);
+      setForm({phone: '', address: '', policy: false});
+      setNewPage(false);
+    }
     async function fetchData () {
       try {
         if (queryType === 'POST') {
@@ -35,7 +36,7 @@ export const Cart = () => {
             body: JSON.stringify(order)
           });
           if (!res.ok) {throw new Error(res.statusText)}
-          setQueryType('GET')
+          setQueryType('GET');
           setFetchStatus(res.status)
         }
       }
