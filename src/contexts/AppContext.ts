@@ -1,7 +1,6 @@
 import { createContext } from "react";
 import { IfromStorage } from "../fromStorage/fromStorage";
 import { Iform } from "../providers/AppProvider";
-import { Icard } from "../Components/Card/Card";
 
 interface IitemOrder {
     id: number,
@@ -18,14 +17,9 @@ interface IitemOrder {
   }
 
 export interface Iapp {
-    data: Icard[],
-    info: Icard | undefined,
-    loading: boolean,
     category: number,
     offset: number,
-    isLoadedAll: boolean,
     change: string,
-    url: string,
     order: Iorder,
     fetchStatus: number,
     queryType: string,
@@ -36,6 +30,7 @@ export interface Iapp {
     cart: IfromStorage[],
     count: number;
     selectSize: string,
+    search: string,
     handleOnClickCategory: (e: React.MouseEvent<HTMLAnchorElement>) => void,
     fetchMoreProducts: () => void,
     handleOnSubmit: (e: React.ChangeEvent<HTMLFormElement>) => void,
@@ -49,21 +44,22 @@ export interface Iapp {
     handleOnClickIncrement: () => void,
     handleOnClickDecrement: () => void,
     handlleOnselected: (e: React.MouseEvent<HTMLButtonElement>) => void,
-    handleOnInCart: (e: React.MouseEvent<HTMLButtonElement>) => void,
     setCart: (e: React.SetStateAction<IfromStorage[]>) => void,
-    setUrl: (e: React.SetStateAction<string>) => void,
-    setError: (e: React.SetStateAction<Error | undefined>) => void
+    setError: (e: React.SetStateAction<Error | undefined>) => void,
+    setOffset: (e: React.SetStateAction<number>) => void,
+    setQueryType: (e: React.SetStateAction<string>) => void,
+    setFetchStatus: (e: React.SetStateAction<number>) => void,
+    setCount: (e: React.SetStateAction<number>) => void,
+    setSize: (e: React.SetStateAction<string>) => void,
+    setChange: (e: React.SetStateAction<string>) => void,
+    setCategory: (e: React.SetStateAction<number>) => void,
+    setForm: (e: React.SetStateAction<Iform>) => void,
   }
 
   const catalogComponentContext = {
-    data: [],
-    info: {id: 0, title: ''},
-    loading: true,
     category: 0,
     offset: 0,
-    isLoadedAll: false,
     change: '',
-    url: '',
     order: {owner: {phone: '', address: ''}, items: [{id: 0, price: 0, count: 0}]},
     fetchStatus: 0,
     queryType: '',
@@ -74,6 +70,7 @@ export interface Iapp {
     cart: [],
     count: 1,
     selectSize: '',
+    search: '',
     handleOnClickCategory: () => {},
     fetchMoreProducts: () => {},
     handleOnSubmit: () => {},
@@ -87,10 +84,16 @@ export interface Iapp {
     handleOnClickIncrement: () => {},
     handleOnClickDecrement: () => {},
     handlleOnselected: () => {},
-    handleOnInCart: () => {},
     setCart: () => {},
-    setUrl: () => {},
-    setError: () => {}
+    setError: () => {},
+    setOffset: () => {},
+    setQueryType: () => {},
+    setFetchStatus: () => {},
+    setCount: () => {},
+    setSize: () => {},
+    setChange: () => {},
+    setCategory: () => {},
+    setForm: () => {}
   }
 
 

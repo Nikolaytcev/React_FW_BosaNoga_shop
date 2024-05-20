@@ -1,9 +1,8 @@
-import { FC, PropsWithChildren, useEffect, useState } from "react"
+import { FC, PropsWithChildren, useState } from "react"
 import { AppContext } from "../contexts/AppContext"
 import { useNavigate } from "react-router-dom";
 import { IfromStorage, fromStorage } from "../fromStorage/fromStorage";
-import { nanoid } from "nanoid";
-import { Icard } from "../Components/Card/Card";
+
 
 export interface Iform {
   phone: string,
@@ -25,26 +24,12 @@ interface IitemOrder {
     items: IitemOrder[]
   }
 
-function chekData (Alldata : Icard[], data: Icard[], setHidden: (e: React.SetStateAction<boolean>) => void) {
-    data.length < 6 ? setHidden(true) : setHidden(false);
-    const listId: number[] = [];
-    Alldata.map(d => listId.push(d.id));
-    const setId = Array.from(new Set(listId));
-  
-    const list: Icard[] = [];
-    setId.forEach(id => {
-    const d = Alldata.find(d => d.id === id);
-    d !== undefined ? list.push(d) : '';});
-    return list;
-  }
-
-
 export const AppProvider: FC<PropsWithChildren> = ({ children }) => {
     const [change, setChange] = useState<string>('');
-    const [url, setUrl] = useState('http://localhost:7070/api/items?q=');
+    const [search,  setSearch] = useState<string>('');
+
     const [category, setCategory] = useState<number>(0);
     const [offset, setOffset] = useState<number>(6);
-    const [isLoadedAll, setLoadedAll] = useState<boolean>(false);
     const [order, setOrder] = useState<Iorder>({owner: {phone: '', address: ''}, items: [{id: 0, price: 0, count: 0}]});
     const [fetchStatus, setFetchStatus] = useState<number>(0);
     const [queryType, setQueryType] = useState<string>('GET');
@@ -56,64 +41,15 @@ export const AppProvider: FC<PropsWithChildren> = ({ children }) => {
     const [count, setCount] = useState<number>(1);
     const [selectSize, setSize] = useState<string>('');
 
-    const [data, setData] = useState<Icard[]>([]);
-    const [info, setInfo] = useState<Icard>();
-    const [loading, setLoading] = useState<boolean>(true);
-
     const navigate = useNavigate();
 
-
-    useEffect(() => {
-      async function fetchData () {
-        try {
-          setLoading(true)
-          if (queryType === 'POST') {
-            const res = await fetch(url, {
-            method: 'POST',
-              headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-              },
-              body: JSON.stringify(order)
-            });
-            if (!res.ok) {throw new Error(res.statusText)}
-            setQueryType('GET')
-            setFetchStatus(res.status)
-          }
-          else {
-            const res = await fetch(url);
-            if (!res.ok) {throw new Error(res.status.toString())}
-            const resJson = await res.json()
-            if (!url.includes('?')) {
-              setInfo(resJson)
-            }
-            else {
-              setData(prevData => prevData = chekData(prevData.concat(resJson), resJson, setLoadedAll))
-            }
-          }
-        }
-        catch(e) {
-          if (e instanceof Error) {
-            setError(e)
-            navigate('/404.html')
-          }
-        }
-        finally {
-          setLoading(false)
-        }
-      }
-      fetchData()
-    }, [url])
-
     const handleOnClickCategory = (e: React.MouseEvent<HTMLAnchorElement>) => {
-        setData([]);
         setCategory(Number(e.currentTarget.id));
-        setUrl(`http://localhost:7070/api/items?q=${change}&categoryId=${e.currentTarget.id}`);
         setOffset(6);
     }
       
     const fetchMoreProducts = () => {
         setOffset(offset => offset += 6);
-        setUrl(`http://localhost:7070/api/items?q=${change}&categoryId=${category}&offset=${offset}`);
     }
 
     const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -135,9 +71,8 @@ export const AppProvider: FC<PropsWithChildren> = ({ children }) => {
         }
         else if (change !== '') {
           setInitvalue('');
+          setSearch(change)
           setSearchStatus(' invisible');
-          setData([]);
-          setUrl(`http://localhost:7070/api/items?q=${change}&categoryId=${category}`);
           navigate('/catalog.html');
         }
         else {
@@ -151,8 +86,7 @@ export const AppProvider: FC<PropsWithChildren> = ({ children }) => {
     
     const handleOnSubmitCatalog = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setData([]);
-        setUrl(`http://localhost:7070/api/items?q=${change}&categoryId=${category}`)
+        setSearch(change);
     }
     
     const handleOnClickCart = () => {
@@ -181,7 +115,6 @@ export const AppProvider: FC<PropsWithChildren> = ({ children }) => {
         setCart([]);
         localStorage.setItem('cart', JSON.stringify([]));
         setOrder(order);
-        setUrl('http://localhost:7070/api/order');
     }
 
     const handleOnClickIncrement = () => {
@@ -201,23 +134,6 @@ export const AppProvider: FC<PropsWithChildren> = ({ children }) => {
         setSize(selectedEl.textContent ? selectedEl.textContent : '');
       }
     }
-  
-    const handleOnInCart = (e: React.MouseEvent<HTMLButtonElement>) => {
-      const btnState = e.currentTarget.classList.contains('disabled');
-      if (!btnState) {
-        const data = fromStorage();
-        const filtered = data.filter(item => item.name === info?.title && item.size === selectSize);
-        if (filtered.length !== 0) {
-          data.map(item => item.name === info?.title && item.size === selectSize ? item.quantity += count : '');
-        }
-        else {
-          data.push({id: nanoid(), name: info?.title ? info.title : '', size: selectSize, quantity: count, price: info?.price ? info.price : 0});
-        }
-        setCart(data);
-        localStorage.setItem('cart', JSON.stringify(data));
-        navigate('/cart.html');
-      }
-    }
 
     const handlers = {handleOnClickCategory,
                       fetchMoreProducts,
@@ -232,17 +148,18 @@ export const AppProvider: FC<PropsWithChildren> = ({ children }) => {
                       handleOnClickIncrement,
                       handleOnClickDecrement,
                       handlleOnselected,
-                      handleOnInCart
                     };
     
-    const variables = {data, info, loading, change,
-                       url, category, offset,
-                       isLoadedAll, order, fetchStatus, queryType,
-                       error, initValue, form, searchSatus,
-                       cart, count, selectSize}
+    const variables = {change, category, offset,order,
+                       fetchStatus, queryType, error, 
+                       initValue, form, searchSatus,
+                       cart, count, selectSize, search};
+    
+    const setters = {setCart, setError, setOffset, setQueryType, setFetchStatus, setCount, setSize, setCategory, setChange, setForm}
+
     
   return (
-    <AppContext.Provider value={{...variables, ...handlers, setCart, setUrl, setError}}>
+    <AppContext.Provider value={{...variables, ...handlers, ...setters}}>
         {children}
     </AppContext.Provider>
   )

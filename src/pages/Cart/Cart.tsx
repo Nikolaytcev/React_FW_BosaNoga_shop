@@ -1,14 +1,56 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Loader } from "../../Components/Loader/Loader";
 import { fromStorage } from "../../fromStorage/fromStorage"
 import { AppContext } from "../../contexts/AppContext";
+import { useNavigate } from "react-router-dom";
 
 export const Cart = () => {
-  const { handleOnDelete, handleOnChangeForm, handleOnSubmit, form, loading, fetchStatus } = useContext(AppContext)
+  const { handleOnDelete, handleOnChangeForm, handleOnSubmit, setError, setQueryType, setFetchStatus, setForm,
+    form, fetchStatus, queryType, order } = useContext(AppContext);
+
   const { phone, address, policy } = form;
   const data = fromStorage();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(true);
+
+
   let sum: number = 0;
   data.forEach(item => sum += item.price * item.quantity)
+
+  useEffect(() => {
+    setFetchStatus(0);
+    setForm({phone: '', address: '', policy: false});
+  }, [])
+
+  useEffect(() => {
+    setLoading(true)
+    async function fetchData () {
+      try {
+        if (queryType === 'POST') {
+          const res = await fetch('http://localhost:7070/api/order', {
+          method: 'POST',
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(order)
+          });
+          if (!res.ok) {throw new Error(res.statusText)}
+          setQueryType('GET')
+          setFetchStatus(res.status)
+        }
+      }
+      catch(e) {
+        if (e instanceof Error) {
+          setError(e)
+          navigate('/404.html')
+        }
+      }
+      finally {
+        setLoading(false)
+      }
+    }
+    fetchData()
+  }, [queryType])
 
   return (
     <> 
