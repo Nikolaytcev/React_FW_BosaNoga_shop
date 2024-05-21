@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { TopSales } from "../../Components/Topsales/TopSales"
 import { AppContext } from "../../contexts/AppContext";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +8,7 @@ import { Category } from "../../Components/Category/Category";
 import { Cards } from "../../Components/Cards/Cards";
 
 export const Home = () => {
- const { offset, category, setError, setOffset, setCategory, fetchMoreProducts} = useContext(AppContext);
+ const { offset, category, setError, setCategory, fetchMoreProducts} = useContext(AppContext);
  const navigate = useNavigate();
 
  const [loading, setLoading] = useState<boolean>(true);
@@ -16,32 +16,28 @@ export const Home = () => {
  const [isLoadedAll, setLoadedAll] = useState<boolean>(false);
  const [newPage, setNewPage] = useState<boolean>(true);
 
- const oldCategory = useRef(category);
-
  useEffect(() => {
-    if (oldCategory.current !== category) {
-      oldCategory.current = category;
-      setData([]);
-    }
     async function fetchData () {
       try {
         setLoading(true);
+
         let url: string = 'http://localhost:7070/api/items';
         if (newPage) {
           setCategory(0),
-          setOffset(6);
+          setNewPage(false);
         }
         if (!newPage && offset !== 6) {
           url =  `http://localhost:7070/api/items?categoryId=${category}&offset=${offset}`;
         }
-        else {
+        else if (!newPage) {
+          setData([]);
           url = `http://localhost:7070/api/items?categoryId=${category}`
         }
           const res = await fetch(url);
           if (!res.ok) {throw new Error(res.status.toString())}
           const resJson = await res.json()
+          console.log(resJson)
           setData(prevData => prevData = chekData(prevData.concat(resJson), resJson, setLoadedAll));
-          setNewPage(false);
         }
       catch(e) {
         if (e instanceof Error) {

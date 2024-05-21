@@ -87,6 +87,7 @@ export const AppProvider: FC<PropsWithChildren> = ({ children }) => {
     const handleOnSubmitCatalog = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setSearch(change);
+        // setOffset(6);
     }
     
     const handleOnClickCart = () => {

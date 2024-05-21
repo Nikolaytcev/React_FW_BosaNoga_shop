@@ -15,16 +15,11 @@ export const Catalog = () => {
  const [data, setData] = useState<Icard[]>([]);
  const [isLoadedAll, setLoadedAll] = useState<boolean>(false);
  const [newPage, setNewPage] = useState<boolean>(true);
-
- const oldCategory = useRef(category);
+ 
  const prevChange = useRef(search);
 
  useEffect(() => {
-    if (oldCategory.current !== category) {
-      oldCategory.current = category;
-      setData([]);
-    }
-    else if (prevChange.current !== search) {
+    if (prevChange.current !== search) {
       prevChange.current = search;
       setOffset(6);
       setData([]);
@@ -35,18 +30,19 @@ export const Catalog = () => {
         let url: string = `http://localhost:7070/api/items?q=${search}`
         if (newPage) {
           setCategory(0),
-          setOffset(6);
           setNewPage(false);
         }
         if (!newPage && offset !== 6) {
           url = `http://localhost:7070/api/items?q=${search}&categoryId=${category}&offset=${offset}`
         }
-        else {
+        else if (!newPage) {
+          setData([]);
           url =  `http://localhost:7070/api/items?q=${search}&categoryId=${category}`
         }
           const res = await fetch(url);
           if (!res.ok) {throw new Error(res.status.toString())}
-          const resJson = await res.json()
+          const resJson = await res.json();
+          console.log(resJson)
           setData(prevData => prevData = chekData(prevData.concat(resJson), resJson, setLoadedAll));
         }
       catch(e) {
